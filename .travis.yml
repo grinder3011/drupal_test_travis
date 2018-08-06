@@ -1,0 +1,68 @@
+# @file
+# .travis.yml - Drupal 8 Travis CI Integration
+
+language: php
+sudo: false
+
+env:
+  global: 
+    # The name of the moduel to run tests on (this module).
+    - DRUPAL_MODULE=example
+    # Additional modules to install (using composer).
+    - REQUIRE='drupal/example_dep1:dep1_version drupal/example_dep2:dep2_version'
+    # Database variable for kernel tests.
+    - SIMPLETEST_DB="mysql://root:@127.0.0.1/drupal"
+    # Web server URL for browser tests.
+    - SIMPLETEST_BASE_URL="http://localhost:8888"
+
+php:
+  - 5.5.9
+  - 5.6
+  - 7.1
+  - hhvm
+
+matrix:
+  allow_failures:
+    # We cannot use hhvm-nightly since that does not work in Travis CI's old
+    # Ubuntu 12.04.
+    - php: hhvm
+  # Don't wait for the allowed failures to build.
+  fast_finish: true
+
+mysql:
+  database: drupal
+  username: root
+  encoding: utf8
+
+install:
+  # Remove Xdebug  # Remove Xdebug.
+  - phpenv config-rm xdebug.ini || true
+
+  # Create database.
+  - mysql -e 'CREATE DATABASE IF NOT EXISTS drupal CHARACTER SET utf8mb4 COLLATE utf8mb4_unicode_ci' -uroot
+
+  # Navigate out of module directory to prevent blown stack by recursive module lookup.
+  - cd ..
+
+  # Install drupal and dependent modules with composer.
+  - composer create-project drupal/drupal drupal "$DRUPAL_VERSION" --no-interaction && cd drupal
+  - composer config repositories.drupal composer https://packages.drupal.org/8
+  - composer require $REQUIRE
+
+  # Reference module in build site.
+  - ln -s $TRAVIS_BUILD_DIR modules/$DRUPAL_MODULE
+
+before_script:
+  # Start a web server on port 8888, run in the background; wait for
+  # initialization.
+  - nohup php -S localhost:8888 > /dev/null 2>&1 &
+
+script:
+  # Run the PHPUnit tests which also include the kernel tests.
+  - $DRUPAL_ROOT/vendor/phpunit/phpunit/phpunit -c $DRUPAL_ROOT/core/phpunit.xml.dist --verbose $DRUPAL_ROOT/modules/$DRUPAL_MODULE
+
+  # Run web test. Specific tests should be added in one of the following formats.
+  - php $DRUPAL_ROOT/core/scripts/run-tests.sh --php $(which php) --url $SIMPLETEST_BASE_URL --module $DRUPAL_MODULE
+  # - php $DRUPAL_ROOT/core/scripts/run-tests.sh --php $(which php) --url $SIMPLETEST_BASE_URL --class "\Drupal\rest\Tests\NodeTest"
+  # - php $DRUPAL_ROOT/core/scripts/run-tests.sh --php $(which php) --url $SIMPLETEST_BASE_URL --class "\Drupal\rest\Tests\NodeTest::testNodes"
+
