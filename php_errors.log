@@ -1,0 +1,4 @@
+[13-Aug-2018 18:01:22 Europe/Berlin] PHP Warning:  require(/var/www/html/drupal_test_travis/vendor/autoload.php): failed to open stream: Permission denied in /var/www/html/drupal_test_travis/autoload.php on line 14
+[13-Aug-2018 18:01:22 Europe/Berlin] PHP Fatal error:  require(): Failed opening required '/var/www/html/drupal_test_travis/vendor/autoload.php' (include_path='.:/usr/share/php') in /var/www/html/drupal_test_travis/autoload.php on line 14
+[13-Aug-2018 18:01:42 Europe/Berlin] PHP Warning:  require(/var/www/html/drupal_test_travis/vendor/autoload.php): failed to open stream: Permission denied in /var/www/html/drupal_test_travis/autoload.php on line 14
+[13-Aug-2018 18:01:42 Europe/Berlin] PHP Fatal error:  require(): Failed opening required '/var/www/html/drupal_test_travis/vendor/autoload.php' (include_path='.:/usr/share/php') in /var/www/html/drupal_test_travis/autoload.php on line 14
