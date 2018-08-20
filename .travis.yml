@@ -2,7 +2,7 @@
 # .travis.yml - Drupal 8 Travis CI Integration
 
 language: php
-dist: trusty
+
 sudo: true
 
 php:
@@ -11,8 +11,14 @@ php:
 before_script:
   - phpenv config-rm xdebug.ini
   - composer --verbose self-update
-  - composer --verbose validate
-  - composer --verbose install --dev --prefer-dist
+  - composer --verbose install --no-interaction --prefer-source --dev
 
 script:
-  - bin/behat
+  - vendor/bin/behat
+
+notifications:
+    email:
+      recipients:
+        - drimma@gmail.com
+
+
