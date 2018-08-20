@@ -19,4 +19,4 @@ install:
   - composer --verbose install
 
 script:
-  - drush tome:install
+  - vendor/bin/behat testing_behat.feature
