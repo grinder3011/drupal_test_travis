@@ -23,7 +23,8 @@
     "prefer-stable": true,
     "config": {
         "preferred-install": "dist",
-        "autoloader-suffix": "Drupal8"
+        "autoloader-suffix": "Drupal8",
+        "bin-dir": "bin/"
     },
     "extra": {
         "_readme": [
@@ -76,8 +77,5 @@
         "behat/behat": "~3.1",
         "behat/mink-goutte-driver": "*",
         "behat/mink": "^1.7"
-    },
-    "config": {
-        "bin-dir": "bin/"
     }
 }
