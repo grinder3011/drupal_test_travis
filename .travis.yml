@@ -8,14 +8,11 @@ sudo: false
 php:
   - 7.1
 
-before_install:
+before_script:
   - phpenv config-rm xdebug.ini
-  - composer --verbose self-update --$COMPOSER_CHANNEL
-  - composer --version
-
-install:
+  - composer --verbose self-update
   - composer --verbose validate
-  - composer --verbose install
+  - composer --verbose install --dev --prefer-dist
 
 script:
   - bin/behat
