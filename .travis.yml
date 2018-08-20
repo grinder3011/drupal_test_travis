@@ -18,4 +18,4 @@ install:
   - composer --verbose install
 
 script:
-  - vendor/bin/behat testing_behat.feature
+  - bin/behat
